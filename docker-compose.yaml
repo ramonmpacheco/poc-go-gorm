@@ -1,0 +1,31 @@
+version: '3'
+services:
+  app:
+    container_name: poc-go-gorm
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - poc-go-gorm
+    volumes:
+      - ./src:/go/src
+  
+  db:
+    container_name: poc-go-gorm-postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: poc_db
+    volumes:
+      - .docker/pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - poc-go-gorm
+
+networks:
+  poc-go-gorm:
+    driver: bridge
