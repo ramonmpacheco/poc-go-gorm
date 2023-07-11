@@ -29,10 +29,10 @@ func main() {
 	// 	Ingredients: ingredientes,
 	// }
 
+	r := chi.NewRouter()
 	repository := repository.NewPastelRepository(dataprovider.NewDb())
 	createHandler := entrypoint.Handler{UseCase: usecase.NewCreatePastelUseCase(repository)}
 	findHandler := entrypoint.Handler{UseCase: usecase.NewFindPastelUseCase(repository)}
-	r := chi.NewRouter()
 	r.Post("/pastel", createHandler.Create)
 	r.Get("/pastel", findHandler.Find)
 	http.ListenAndServe(":3000", r)

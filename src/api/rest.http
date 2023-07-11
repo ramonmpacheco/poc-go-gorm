@@ -1,0 +1,15 @@
+
+POST http://localhost:3000/pastel
+
+{
+    "name": "Boi ralado",
+    "price": 9.50,
+    "ingredients":  [
+        {
+            "name": "Queijo mussarela",
+	        "desc": "200 gramas"
+        }
+    ]
+}
+
+###
