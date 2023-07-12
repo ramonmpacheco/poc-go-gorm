@@ -11,29 +11,9 @@ import (
 )
 
 func main() {
-	// carne := model.Ingredient{
-	// 	Name: "Carne" + xid.New().String(),
-	// 	Desc: "250 gramas",
-	// }
-	// queijo := model.Ingredient{
-	// 	Name: "Queijo mussarela" + xid.New().String(),
-	// 	Desc: "200 gramas",
-	// }
-
-	// ingredientes := []model.Ingredient{
-	// 	carne, queijo,
-	// }
-	// carneQueijo := model.Pastel{
-	// 	Name:        "Carne com queijo" + xid.New().String(),
-	// 	Price:       9.50,
-	// 	Ingredients: ingredientes,
-	// }
-
 	r := chi.NewRouter()
 	repository := repository.NewPastelRepository(dataprovider.NewDb())
-	createHandler := entrypoint.Handler{UseCase: usecase.NewCreatePastelUseCase(repository)}
-	findHandler := entrypoint.Handler{UseCase: usecase.NewFindPastelUseCase(repository)}
-	r.Post("/pastel", createHandler.Create)
-	r.Get("/pastel", findHandler.Find)
+	controller := entrypoint.NewCreatePastelController(usecase.NewCreatePastelUseCase(repository))
+	r.Post("/pastel", controller.Create)
 	http.ListenAndServe(":3000", r)
 }

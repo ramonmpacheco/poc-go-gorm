@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"fmt"
 	"strings"
 	"time"
 
@@ -11,7 +10,7 @@ import (
 )
 
 type ICreatePastelUseCase interface {
-	Execute(pastel *model.Pastel)
+	Create(pastel *model.Pastel) (string, error)
 }
 
 type createPastelUseCase struct {
@@ -24,7 +23,7 @@ func NewCreatePastelUseCase(repository dataprovider.IPastelRepository) ICreatePa
 	}
 }
 
-func (cpuc *createPastelUseCase) Execute(pastel *model.Pastel) {
+func (cpuc *createPastelUseCase) Create(pastel *model.Pastel) (string, error) {
 	pastel.ID = xid.New().String()
 	pastel.Name = strings.ToUpper(pastel.Name)
 	pastel.CreatedAt = time.Now()
@@ -36,8 +35,7 @@ func (cpuc *createPastelUseCase) Execute(pastel *model.Pastel) {
 	}
 
 	if err := cpuc.Repository.Create(*pastel); err != nil {
-		fmt.Println(err.Error())
-		return
+		return "", err
 	}
-	fmt.Println("Pastel created successfully 😋")
+	return pastel.ID, nil
 }
