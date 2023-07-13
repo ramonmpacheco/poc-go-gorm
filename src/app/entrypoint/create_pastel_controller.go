@@ -6,6 +6,8 @@ import (
 	"github.com/ramonmpacheco/poc-go-gorm/app/entrypoint/converter"
 	"github.com/ramonmpacheco/poc-go-gorm/app/entrypoint/model"
 	"github.com/ramonmpacheco/poc-go-gorm/app/entrypoint/validator"
+	"github.com/ramonmpacheco/poc-go-gorm/utils"
+
 	"github.com/ramonmpacheco/poc-go-gorm/domain/usecase"
 
 	"github.com/go-chi/render"
@@ -26,21 +28,23 @@ func (cpc *createPastelController) Create(w http.ResponseWriter, r *http.Request
 	err := render.DecodeJSON(r.Body, &request)
 	if err != nil {
 		render.Status(r, http.StatusBadRequest)
+		render.JSON(w, r, model.NewCreateResponse(false, "Erro ao processar, revise os dados enviados"))
 		return
 	}
 
 	result, err := validator.ValidateStruct(request)
 	if err != nil {
 		render.Status(r, http.StatusBadRequest)
-		render.JSON(w, r, result)
+		render.JSON(w, r, model.NewErrorResponse("Validation error", result))
 		return
 	}
 
 	id, err := cpc.UseCase.Create(converter.ToPastelDomain(request))
 	if err != nil {
 		render.Status(r, http.StatusInternalServerError)
+		render.JSON(w, r, model.NewCreateResponse(false, err.Error()))
 		return
 	}
 	render.Status(r, http.StatusCreated)
-	render.JSON(w, r, id)
+	render.JSON(w, r, model.NewCreateResponseSuccess(id, utils.BaseUrl+utils.BaseUri))
 }

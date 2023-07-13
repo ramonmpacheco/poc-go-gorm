@@ -17,6 +17,7 @@ func toIngredienteDomain(ingredientes []model.CreateIngredientRequest) []domain.
 	i := make([]domain.Ingredient, 0)
 	for _, v := range ingredientes {
 		i = append(i, domain.Ingredient{
+			ID:   v.ID,
 			Name: v.Name,
 			Desc: v.Desc,
 		})
