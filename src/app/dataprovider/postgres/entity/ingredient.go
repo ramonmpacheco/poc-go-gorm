@@ -12,5 +12,5 @@ type Ingredient struct {
 
 // Custom table name
 func (Ingredient) TableName() string {
-	return "ingredient"
+	return "ingredients"
 }

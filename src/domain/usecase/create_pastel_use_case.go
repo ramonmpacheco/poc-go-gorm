@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/ramonmpacheco/poc-go-gorm/domain/dataprovider"
-	domainerrors "github.com/ramonmpacheco/poc-go-gorm/domain/domain_errors"
 	"github.com/ramonmpacheco/poc-go-gorm/domain/model"
 	"github.com/rs/xid"
 )
@@ -38,7 +37,7 @@ func (cpuc *createPastelUseCase) Create(pastel *model.Pastel) (string, error) {
 	}
 
 	if err := cpuc.Repository.Create(*pastel); err != nil {
-		return "", domainerrors.ErrInternal
+		return "", err
 	}
 	return pastel.ID, nil
 }
