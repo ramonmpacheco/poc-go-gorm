@@ -4,9 +4,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/ramonmpacheco/poc-go-gorm/domain/dataprovider"
 	"github.com/ramonmpacheco/poc-go-gorm/domain/model"
-	"github.com/rs/xid"
 )
 
 type ICreatePastelUseCase interface {
@@ -24,13 +24,13 @@ func NewCreatePastelUseCase(repository dataprovider.IPastelRepository) ICreatePa
 }
 
 func (cpuc *createPastelUseCase) Create(pastel *model.Pastel) (string, error) {
-	pastel.ID = xid.New().String()
+	pastel.ID = uuid.New().String()
 	pastel.Name = strings.ToUpper(pastel.Name)
 	pastel.CreatedAt = time.Now()
 
 	for i, v := range pastel.Ingredients {
 		if v.ID == "" {
-			pastel.Ingredients[i].ID = xid.New().String()
+			pastel.Ingredients[i].ID = uuid.New().String()
 		}
 		pastel.Ingredients[i].Name = strings.ToUpper(v.Name)
 		pastel.Ingredients[i].CreatedAt = time.Now()
