@@ -1,7 +1,7 @@
 package converter
 
 import (
-	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/postgres/entity"
+	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/entity"
 	"github.com/ramonmpacheco/poc-go-gorm/domain/model"
 )
 

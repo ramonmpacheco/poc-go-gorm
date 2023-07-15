@@ -1,8 +1,8 @@
 package repository
 
 import (
+	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/converter"
 	dataerrors "github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/data_errors"
-	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/postgres/converter"
 	"github.com/ramonmpacheco/poc-go-gorm/domain/dataprovider"
 	"github.com/ramonmpacheco/poc-go-gorm/domain/model"
 	"gorm.io/gorm"
