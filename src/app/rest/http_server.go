@@ -12,7 +12,7 @@ import (
 	"github.com/ramonmpacheco/poc-go-gorm/utils"
 )
 
-func Init(repository dataprovider.IPastelRepository) {
+func InitRoutes(repository dataprovider.IPastelRepository) *chi.Mux {
 	r := chi.NewRouter()
 	createController := entrypoint.NewCreatePastelController(
 		usecase.NewCreatePastelUseCase(repository),
@@ -22,6 +22,10 @@ func Init(repository dataprovider.IPastelRepository) {
 	r.Route(utils.BaseUri, func(r chi.Router) {
 		r.Post("/", createController.Create)
 	})
+	return r
+}
+
+func Start(r *chi.Mux) {
 	fmt.Println("About to start http server, port: 3000")
 	http.ListenAndServe(":3000", r)
 }
