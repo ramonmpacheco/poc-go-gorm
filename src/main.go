@@ -10,7 +10,9 @@ import (
 
 func main() {
 	fmt.Println("About to start app")
-	rest.Init(
-		repository.NewPastelRepository(dataprovider.NewPostgres()),
+	rest.Start(
+		rest.InitRoutes(
+			repository.NewPastelRepository(dataprovider.NewPostgres()),
+		),
 	)
 }

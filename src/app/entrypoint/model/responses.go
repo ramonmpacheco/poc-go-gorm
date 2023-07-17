@@ -2,7 +2,7 @@ package model
 
 import "fmt"
 
-type createResponse struct {
+type CreateResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
 	ID      string `json:"id,omitempty"`
@@ -15,8 +15,8 @@ type link struct {
 	Type string `json:"type"`
 }
 
-func NewCreateResponseSuccess(id, selfHref string) createResponse {
-	return createResponse{
+func NewCreateResponseSuccess(id, selfHref string) CreateResponse {
+	return CreateResponse{
 		Success: true,
 		ID:      id,
 		Message: "resource successfuly created",
@@ -24,8 +24,8 @@ func NewCreateResponseSuccess(id, selfHref string) createResponse {
 	}
 }
 
-func NewCreateResponse(success bool, message string) createResponse {
-	return createResponse{
+func NewCreateResponse(success bool, message string) CreateResponse {
+	return CreateResponse{
 		Success: success,
 		Message: message,
 	}

@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider"
+	dataerrors "github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/data_errors"
 	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/entity"
 	"github.com/ramonmpacheco/poc-go-gorm/app/test"
 	domainerrors "github.com/ramonmpacheco/poc-go-gorm/domain/domain_errors"
@@ -76,6 +77,29 @@ func TestCreate_more_than_one_ingridient(t *testing.T) {
 		Preload("Ingredients").
 		First(&savedPastel, "id = ?", pastelToSave.ID)
 	assert.Len(t, savedPastel.Ingredients, 3)
+}
+
+func TestCreate_error_constraint(t *testing.T) {
+	mockDB := new(test.MockDB)
+	mockDB.On("Create", mock.Anything).Return(&gorm.DB{
+		Error: gorm.ErrDuplicatedKey,
+	})
+
+	repo := NewPastelRepository(mockDB)
+	err := repo.Create(model.Pastel{
+		ID:    uuid.NewString(),
+		Name:  "Pantaneiro",
+		Price: 10.0,
+		Ingredients: []model.Ingredient{
+			{
+				ID:   uuid.NewString(),
+				Name: "Carne",
+				Desc: "300 gramas",
+			},
+		},
+	})
+	assert.NotNil(t, err)
+	assert.ErrorIs(t, err, dataerrors.ErrDuplicatedKey)
 }
 
 func TestCreate_internal_error(t *testing.T) {
