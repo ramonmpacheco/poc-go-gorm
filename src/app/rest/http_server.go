@@ -17,10 +17,14 @@ func InitRoutes(repository dataprovider.IPastelRepository) *chi.Mux {
 	createController := entrypoint.NewCreatePastelController(
 		usecase.NewCreatePastelUseCase(repository),
 	)
+	findController := entrypoint.NewFindPastelController(
+		usecase.NewFindPastelUseCase(repository),
+	)
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Logger)
 	r.Route(utils.BaseUri, func(r chi.Router) {
 		r.Post("/", createController.Create)
+		r.Get("/{id}", findController.FindById)
 	})
 	return r
 }

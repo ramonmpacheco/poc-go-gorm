@@ -4,11 +4,10 @@ import (
 	"fmt"
 
 	"github.com/ramonmpacheco/poc-go-gorm/domain/dataprovider"
-	"github.com/ramonmpacheco/poc-go-gorm/domain/model"
 )
 
 type IFindPastelUseCase interface {
-	Execute(pastel *model.Pastel)
+	FindById(string)
 }
 
 type findPastelUseCase struct {
@@ -21,6 +20,6 @@ func NewFindPastelUseCase(repository dataprovider.IPastelRepository) IFindPastel
 	}
 }
 
-func (cpuc *findPastelUseCase) Execute(pastel *model.Pastel) {
+func (cpuc *findPastelUseCase) FindById(id string) {
 	fmt.Println("Find usecase")
 }
