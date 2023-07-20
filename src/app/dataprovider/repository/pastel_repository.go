@@ -4,6 +4,7 @@ import (
 	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider"
 	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/converter"
 	dataerrors "github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/data_errors"
+	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/entity"
 	domaindataprovider "github.com/ramonmpacheco/poc-go-gorm/domain/dataprovider"
 	"github.com/ramonmpacheco/poc-go-gorm/domain/model"
 )
@@ -26,4 +27,16 @@ func (pr *pastelRepository) Create(pastel model.Pastel) error {
 		return dataerrors.GetProperError(result.Error)
 	}
 	return nil
+}
+
+func (pr *pastelRepository) FindById(id string) (*model.Pastel, error) {
+	var pastel entity.Pastel
+	result := pr.Db.Model(&entity.Pastel{}).
+		// Eager
+		Preload("Ingredients").
+		First(&pastel, "id = ?", id)
+	if result.Error != nil {
+		return nil, dataerrors.GetProperError(result.Error)
+	}
+	return converter.ToPastelDomain(pastel), nil
 }

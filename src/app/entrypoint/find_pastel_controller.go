@@ -4,6 +4,9 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi"
+	"github.com/go-chi/render"
+	"github.com/ramonmpacheco/poc-go-gorm/app/entrypoint/converter"
+	"github.com/ramonmpacheco/poc-go-gorm/app/entrypoint/model"
 	"github.com/ramonmpacheco/poc-go-gorm/domain/usecase"
 )
 
@@ -19,5 +22,12 @@ func NewFindPastelController(useCase usecase.IFindPastelUseCase) *findPastelCont
 
 func (fpuc *findPastelController) FindById(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	fpuc.UseCase.FindById(id)
+	pastel, err := fpuc.UseCase.FindById(id)
+	if err != nil {
+		render.Status(r, http.StatusInternalServerError) // create struc to erro have status code
+		render.JSON(w, r, model.NewCreateResponse(false, err.Error()))
+		return
+	}
+	render.Status(r, http.StatusCreated)
+	render.JSON(w, r, model.NewFindByIdSuccessResponse(converter.ToPastelResponse(*pastel)))
 }
