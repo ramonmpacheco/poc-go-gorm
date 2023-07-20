@@ -12,7 +12,7 @@ import (
 )
 
 func TestCreatePastel_success(t *testing.T) {
-	repositoryMock := new(test.CreatePastelRepositoryMock)
+	repositoryMock := new(test.PastelRepositoryMock)
 	repositoryMock.On("Create", mock.Anything).Return(nil)
 
 	usecase := usecase.NewCreatePastelUseCase(repositoryMock)
@@ -32,7 +32,7 @@ func TestCreatePastel_success(t *testing.T) {
 }
 
 func TestCreatePastel_error(t *testing.T) {
-	repositoryMock := new(test.CreatePastelRepositoryMock)
+	repositoryMock := new(test.PastelRepositoryMock)
 	repositoryMock.On("Create", mock.Anything).Return(errors.New("test error"))
 
 	usecase := usecase.NewCreatePastelUseCase(repositoryMock)

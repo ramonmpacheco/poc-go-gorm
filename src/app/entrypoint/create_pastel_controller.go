@@ -6,7 +6,6 @@ import (
 	"github.com/ramonmpacheco/poc-go-gorm/app/entrypoint/converter"
 	"github.com/ramonmpacheco/poc-go-gorm/app/entrypoint/model"
 	"github.com/ramonmpacheco/poc-go-gorm/app/entrypoint/validator"
-	"github.com/ramonmpacheco/poc-go-gorm/utils"
 
 	"github.com/ramonmpacheco/poc-go-gorm/domain/usecase"
 
@@ -46,5 +45,5 @@ func (cpc *createPastelController) Create(w http.ResponseWriter, r *http.Request
 		return
 	}
 	render.Status(r, http.StatusCreated)
-	render.JSON(w, r, model.NewCreateResponseSuccess(id, utils.BaseUrl+utils.BaseUri))
+	render.JSON(w, r, model.NewCreateResponseSuccess(id))
 }

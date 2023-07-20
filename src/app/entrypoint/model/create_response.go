@@ -1,6 +1,10 @@
 package model
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/ramonmpacheco/poc-go-gorm/utils"
+)
 
 type CreateResponse struct {
 	Success bool   `json:"success"`
@@ -9,18 +13,12 @@ type CreateResponse struct {
 	Links   []link `json:"_links,omitempty"`
 }
 
-type link struct {
-	Rel  string `json:"relationship"`
-	Href string `json:"href"`
-	Type string `json:"type"`
-}
-
-func NewCreateResponseSuccess(id, selfHref string) CreateResponse {
+func NewCreateResponseSuccess(id string) CreateResponse {
 	return CreateResponse{
 		Success: true,
 		ID:      id,
 		Message: "resource successfuly created",
-		Links:   getLinks(id, selfHref),
+		Links:   getCreateResponseLinks(id, utils.BaseUrl+utils.BaseUri),
 	}
 }
 
@@ -31,23 +29,9 @@ func NewCreateResponse(success bool, message string) CreateResponse {
 	}
 }
 
-func getLinks(id, selfHref string) []link {
+func getCreateResponseLinks(id, selfHref string) []link {
 	links := make([]link, 0)
 	links = append(links, link{Rel: "ingredients", Href: fmt.Sprintf("%s/%s", selfHref, id), Type: "GET"})
 	links = append(links, link{Rel: "ingredients", Href: fmt.Sprintf("%s/%s", selfHref, id), Type: "DELETE"})
 	return links
-}
-
-type ErrorResponse struct {
-	Success bool     `json:"success"`
-	Message string   `json:"message"`
-	Errors  []string `json:"errors"`
-}
-
-func NewErrorResponse(message string, errs []string) ErrorResponse {
-	return ErrorResponse{
-		Success: false,
-		Message: message,
-		Errors:  errs,
-	}
 }
