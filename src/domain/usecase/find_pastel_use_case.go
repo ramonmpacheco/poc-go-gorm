@@ -1,13 +1,12 @@
 package usecase
 
 import (
-	"fmt"
-
 	"github.com/ramonmpacheco/poc-go-gorm/domain/dataprovider"
+	"github.com/ramonmpacheco/poc-go-gorm/domain/model"
 )
 
 type IFindPastelUseCase interface {
-	FindById(string)
+	FindById(string) (*model.Pastel, error)
 }
 
 type findPastelUseCase struct {
@@ -20,6 +19,6 @@ func NewFindPastelUseCase(repository dataprovider.IPastelRepository) IFindPastel
 	}
 }
 
-func (cpuc *findPastelUseCase) FindById(id string) {
-	fmt.Println("Find usecase")
+func (cpuc *findPastelUseCase) FindById(id string) (*model.Pastel, error) {
+	return cpuc.Repository.FindById(id)
 }

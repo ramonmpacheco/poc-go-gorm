@@ -11,6 +11,7 @@ import (
 
 type IDatabase interface {
 	Create(value interface{}) *gorm.DB
+	Model(value interface{}) *gorm.DB
 }
 
 type Database struct {
@@ -19,6 +20,10 @@ type Database struct {
 
 func (dbi *Database) Create(value interface{}) *gorm.DB {
 	return dbi.DB.Create(value)
+}
+
+func (dbi *Database) Model(value interface{}) *gorm.DB {
+	return dbi.DB.Model(value)
 }
 
 func NewPostgres() *Database {
