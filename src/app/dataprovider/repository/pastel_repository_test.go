@@ -124,3 +124,33 @@ func TestCreate_internal_error(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.ErrorIs(t, err, domainerrors.ErrInternal)
 }
+
+func TestFindById_Success(t *testing.T) {
+	db := dataprovider.NewSqlite()
+	repository := NewPastelRepository(db)
+	pastelToSave := test.BuildPastelWithIgredients("Pantaneiro", []string{"Carne"})
+	err := repository.Create(pastelToSave)
+	assert.Nil(t, err)
+
+	pastel, err := repository.FindById(pastelToSave.ID)
+
+	assert.Nil(t, err)
+	assert.EqualValues(t, pastelToSave.ID, pastel.ID)
+	assert.EqualValues(t, pastelToSave.Name, pastel.Name)
+	assert.EqualValues(t, pastelToSave.Price, pastel.Price)
+	assert.Len(t, pastel.Ingredients, 1)
+	assert.EqualValues(t, pastelToSave.Ingredients[0].ID, pastel.Ingredients[0].ID)
+	assert.EqualValues(t, pastelToSave.Ingredients[0].Name, pastel.Ingredients[0].Name)
+	assert.EqualValues(t, pastelToSave.Ingredients[0].Desc, pastel.Ingredients[0].Desc)
+}
+
+func TestFindById_Notfound(t *testing.T) {
+	db := dataprovider.NewSqlite()
+	repository := NewPastelRepository(db)
+
+	pastel, err := repository.FindById("1234")
+
+	assert.Nil(t, pastel)
+	assert.NotNil(t, err)
+	assert.ErrorIs(t, dataerrors.ErrNotFound, err)
+}
