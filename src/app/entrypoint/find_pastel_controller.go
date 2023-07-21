@@ -24,10 +24,10 @@ func (fpuc *findPastelController) FindById(w http.ResponseWriter, r *http.Reques
 	id := chi.URLParam(r, "id")
 	pastel, err := fpuc.UseCase.FindById(id)
 	if err != nil {
-		render.Status(r, http.StatusInternalServerError) // create struc to erro have status code
+		render.Status(r, model.GetStatusFrom(err))
 		render.JSON(w, r, model.NewCreateResponse(false, err.Error()))
 		return
 	}
-	render.Status(r, http.StatusCreated)
+	render.Status(r, http.StatusOK)
 	render.JSON(w, r, model.NewFindByIdSuccessResponse(converter.ToPastelResponse(*pastel)))
 }

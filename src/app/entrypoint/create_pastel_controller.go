@@ -33,7 +33,7 @@ func (cpc *createPastelController) Create(w http.ResponseWriter, r *http.Request
 
 	result, err := validator.ValidateStruct(request)
 	if err != nil {
-		render.Status(r, http.StatusBadRequest)
+		render.Status(r, model.GetStatusFrom(err))
 		render.JSON(w, r, model.NewErrorResponse("Validation error", result))
 		return
 	}
