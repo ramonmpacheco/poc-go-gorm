@@ -40,3 +40,11 @@ func (pr *pastelRepository) FindById(id string) (*model.Pastel, error) {
 	}
 	return converter.ToPastelDomain(pastel), nil
 }
+
+func (pr *pastelRepository) Update(pastel model.Pastel) error {
+	result := pr.Db.UpdateWithAssociations(converter.ToPastelEntity(pastel))
+	if result.Error != nil {
+		return dataerrors.GetProperError(result.Error)
+	}
+	return nil
+}

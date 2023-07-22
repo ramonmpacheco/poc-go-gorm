@@ -21,3 +21,8 @@ func (prm *PastelRepositoryMock) FindById(id string) (*model.Pastel, error) {
 	}
 	return args.Get(0).(*model.Pastel), nil
 }
+
+func (prm *PastelRepositoryMock) Update(pastel model.Pastel) error {
+	args := prm.Called(pastel)
+	return args.Error(0)
+}

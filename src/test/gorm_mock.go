@@ -120,3 +120,8 @@ func (mdb *MockDB) Where(query interface{}, args ...interface{}) *gorm.DB {
 	mockArgs := append([]interface{}{query}, args...)
 	return mdb.Called(mockArgs...).Get(0).(*gorm.DB)
 }
+
+func (mdb *MockDB) UpdateWithAssociations(value interface{}) *gorm.DB {
+	args := mdb.Called(value)
+	return args.Get(0).(*gorm.DB)
+}
