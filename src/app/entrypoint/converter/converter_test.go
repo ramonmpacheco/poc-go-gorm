@@ -10,7 +10,7 @@ import (
 func TestToPastelDomain_pastel_and_ingredients_success(t *testing.T) {
 	pastelRequest := test.BuildCreatePastelRequest("Carne", []string{"Carne", "Azeitona"})
 
-	pastelDomain := ToPastelDomain(pastelRequest)
+	pastelDomain := ToPastelDomainFromCreate(pastelRequest)
 
 	assert.EqualValues(t, pastelRequest.Name, pastelDomain.Name)
 	assert.EqualValues(t, pastelRequest.Price, pastelDomain.Price)

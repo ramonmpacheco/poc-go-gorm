@@ -11,8 +11,8 @@ func ToPastelEntity(pastel model.Pastel) *entity.Pastel {
 		Name:        pastel.Name,
 		Price:       pastel.Price,
 		Ingredients: toIngredientEntity(pastel.Ingredients),
-		CreatedAt:   &pastel.CreatedAt,
-		UpdatedAt:   &pastel.UpdatedAt,
+		CreatedAt:   pastel.CreatedAt,
+		UpdatedAt:   pastel.UpdatedAt,
 	}
 }
 
@@ -23,8 +23,8 @@ func toIngredientEntity(ingredients []model.Ingredient) []entity.Ingredient {
 			ID:        v.ID,
 			Name:      v.Name,
 			Desc:      v.Desc,
-			CreatedAt: &v.CreatedAt,
-			UpdatedAt: &v.UpdatedAt,
+			CreatedAt: v.CreatedAt,
+			UpdatedAt: v.UpdatedAt,
 		})
 	}
 	return i
@@ -36,8 +36,8 @@ func ToPastelDomain(pastel entity.Pastel) *model.Pastel {
 		Name:        pastel.Name,
 		Price:       pastel.Price,
 		Ingredients: toIngredientDomain(pastel.Ingredients),
-		CreatedAt:   *pastel.CreatedAt,
-		UpdatedAt:   *pastel.UpdatedAt,
+		CreatedAt:   pastel.CreatedAt,
+		UpdatedAt:   pastel.UpdatedAt,
 	}
 }
 
@@ -48,8 +48,8 @@ func toIngredientDomain(ingredients []entity.Ingredient) []model.Ingredient {
 			ID:        v.ID,
 			Name:      v.Name,
 			Desc:      v.Desc,
-			CreatedAt: *v.CreatedAt,
-			UpdatedAt: *v.UpdatedAt,
+			CreatedAt: v.CreatedAt,
+			UpdatedAt: v.UpdatedAt,
 		})
 	}
 	return i

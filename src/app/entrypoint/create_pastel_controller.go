@@ -38,7 +38,7 @@ func (cpc *createPastelController) Create(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	id, err := cpc.UseCase.Create(converter.ToPastelDomain(request))
+	id, err := cpc.UseCase.Create(converter.ToPastelDomainFromCreate(request))
 	if err != nil {
 		render.Status(r, http.StatusInternalServerError)
 		render.JSON(w, r, model.NewCreateResponse(false, err.Error()))

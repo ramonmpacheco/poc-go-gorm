@@ -26,14 +26,15 @@ func NewCreatePastelUseCase(repository dataprovider.IPastelRepository) ICreatePa
 func (cpuc *createPastelUseCase) Create(pastel *model.Pastel) (string, error) {
 	pastel.ID = uuid.New().String()
 	pastel.Name = strings.ToUpper(pastel.Name)
-	pastel.CreatedAt = time.Now()
+	now := time.Now()
+	pastel.CreatedAt = &now
 
 	for i, v := range pastel.Ingredients {
 		if v.ID == "" {
 			pastel.Ingredients[i].ID = uuid.New().String()
 		}
 		pastel.Ingredients[i].Name = strings.ToUpper(v.Name)
-		pastel.Ingredients[i].CreatedAt = time.Now()
+		pastel.Ingredients[i].CreatedAt = &now
 	}
 
 	if err := cpuc.Repository.Create(*pastel); err != nil {

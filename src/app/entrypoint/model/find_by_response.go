@@ -2,7 +2,6 @@ package model
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/ramonmpacheco/poc-go-gorm/utils"
 )
@@ -11,23 +10,6 @@ type FindByIdResponse struct {
 	Success bool           `json:"success"`
 	Data    PastelResponse `json:"data"`
 	Links   []link         `json:"_links,omitempty"`
-}
-
-type PastelResponse struct {
-	ID          string               `json:"id"`
-	Name        string               `json:"name"`
-	Price       float32              `json:"price"`
-	Ingredients []IngredientResponse `json:"ingredients"`
-	CreatedAt   time.Time            `json:"created_at"`
-	UpdatedAt   time.Time            `json:"updated_at"`
-}
-
-type IngredientResponse struct {
-	ID        string    `json:"id"`
-	Name      string    `json:"name"`
-	Desc      string    `json:"desc"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func NewFindByIdSuccessResponse(pastel PastelResponse) FindByIdResponse {
