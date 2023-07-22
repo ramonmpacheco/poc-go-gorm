@@ -11,7 +11,7 @@ import (
 	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/repository"
 	"github.com/ramonmpacheco/poc-go-gorm/app/entrypoint/model"
 	"github.com/ramonmpacheco/poc-go-gorm/app/rest"
-	"github.com/ramonmpacheco/poc-go-gorm/app/test"
+	"github.com/ramonmpacheco/poc-go-gorm/test"
 	"github.com/ramonmpacheco/poc-go-gorm/utils"
 	"github.com/stretchr/testify/assert"
 )

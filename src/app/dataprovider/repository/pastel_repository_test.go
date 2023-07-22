@@ -7,9 +7,9 @@ import (
 	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider"
 	dataerrors "github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/data_errors"
 	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/entity"
-	"github.com/ramonmpacheco/poc-go-gorm/app/test"
 	domainerrors "github.com/ramonmpacheco/poc-go-gorm/domain/domain_errors"
 	"github.com/ramonmpacheco/poc-go-gorm/domain/model"
+	"github.com/ramonmpacheco/poc-go-gorm/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"gorm.io/gorm"
@@ -18,7 +18,7 @@ import (
 func TestCreate_success(t *testing.T) {
 	db := dataprovider.NewSqlite()
 	repository := NewPastelRepository(db)
-	pastelToSave := test.BuildPastelWithIgredients("Pantaneiro", []string{"Carne"})
+	pastelToSave := test.BuildPastelDomainWithIgredients("Pantaneiro", []string{"Carne"})
 	err := repository.Create(pastelToSave)
 	assert.Nil(t, err)
 
@@ -40,7 +40,7 @@ func TestCreate_using_same_ingredient_twice(t *testing.T) {
 	db := dataprovider.NewSqlite()
 	repository := NewPastelRepository(db)
 
-	pastelToSave := test.BuildPastelWithIgredients("Pantaneiro", []string{"Carne"})
+	pastelToSave := test.BuildPastelDomainWithIgredients("Pantaneiro", []string{"Carne"})
 	assert.Nil(t, repository.Create(pastelToSave))
 
 	var savedPastel entity.Pastel
@@ -48,7 +48,7 @@ func TestCreate_using_same_ingredient_twice(t *testing.T) {
 		Preload("Ingredients").
 		First(&savedPastel, "id = ?", pastelToSave.ID)
 
-	pastelToSave2 := test.BuildPastelWithIgredients("Pantaneiro 2", []string{"Carne"})
+	pastelToSave2 := test.BuildPastelDomainWithIgredients("Pantaneiro 2", []string{"Carne"})
 	pastelToSave2.Ingredients[0].ID = pastelToSave.Ingredients[0].ID
 	assert.Nil(t, repository.Create(pastelToSave2))
 
@@ -70,7 +70,7 @@ func TestCreate_using_same_ingredient_twice(t *testing.T) {
 func TestCreate_more_than_one_ingridient(t *testing.T) {
 	db := dataprovider.NewSqlite()
 	repository := NewPastelRepository(db)
-	pastelToSave := test.BuildPastelWithIgredients("Boi Ralado", []string{"Carne", "Queijo", "Azeitona"})
+	pastelToSave := test.BuildPastelDomainWithIgredients("Boi Ralado", []string{"Carne", "Queijo", "Azeitona"})
 	repository.Create(pastelToSave)
 	var savedPastel entity.Pastel
 	db.DB.Model(&entity.Pastel{}).
@@ -128,7 +128,7 @@ func TestCreate_internal_error(t *testing.T) {
 func TestFindById_Success(t *testing.T) {
 	db := dataprovider.NewSqlite()
 	repository := NewPastelRepository(db)
-	pastelToSave := test.BuildPastelWithIgredients("Pantaneiro", []string{"Carne"})
+	pastelToSave := test.BuildPastelDomainWithIgredients("Pantaneiro", []string{"Carne"})
 	err := repository.Create(pastelToSave)
 	assert.Nil(t, err)
 
