@@ -7,7 +7,6 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 type IDatabase interface {
@@ -29,7 +28,7 @@ func (dbi *Database) Model(value interface{}) *gorm.DB {
 }
 
 func (dbi *Database) UpdateWithAssociations(value interface{}) *gorm.DB {
-	return dbi.DB.Session(getFullSaveAssociations()).Clauses(clause.Returning{}).Updates(value)
+	return dbi.DB.Session(getFullSaveAssociations()).Updates(value)
 }
 
 func getFullSaveAssociations() *gorm.Session {

@@ -45,6 +45,10 @@ func (pr *pastelRepository) Update(pastel model.Pastel) error {
 	result := pr.Db.UpdateWithAssociations(converter.ToPastelEntity(pastel))
 	if result.Error != nil {
 		return dataerrors.GetProperError(result.Error)
+	} else if result.RowsAffected == 0 {
+		return dataerrors.GetProperError(
+			dataerrors.NewCustomErr(dataerrors.ErrNotFound.Error()),
+		)
 	}
 	return nil
 }

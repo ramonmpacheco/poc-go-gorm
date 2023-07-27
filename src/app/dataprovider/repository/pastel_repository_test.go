@@ -154,3 +154,45 @@ func TestFindById_Notfound(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.ErrorIs(t, dataerrors.ErrNotFound, err)
 }
+
+func TestUpdate_Success(t *testing.T) {
+	db := dataprovider.NewSqlite()
+	repo := NewPastelRepository(db)
+	pastel := test.BuildPastelDomainWithIgredients("Pantaneiro", []string{"Carne"})
+	err := repo.Create(pastel)
+	assert.Nil(t, err)
+
+	pastel.Name = "Pantaneiro Update"
+	pastel.Price = float32(12.50)
+	pastel.Ingredients[0].Name = "Carne Update"
+	pastel.Ingredients[0].Desc = "Update"
+
+	err = repo.Update(pastel)
+	assert.Nil(t, err)
+
+	saved, _ := repo.FindById(pastel.ID)
+
+	assert.EqualValues(t, pastel.Name, saved.Name)
+	assert.EqualValues(t, pastel.Price, saved.Price)
+	assert.EqualValues(t, pastel.Ingredients[0].Name, saved.Ingredients[0].Name)
+	assert.EqualValues(t, pastel.Ingredients[0].Desc, saved.Ingredients[0].Desc)
+	assert.EqualValues(t, pastel.Ingredients[0].Desc, saved.Ingredients[0].Desc)
+	assert.NotNil(t, saved.Ingredients[0].CreatedAt)
+	assert.NotNil(t, saved.Ingredients[0].UpdatedAt)
+}
+
+func TestUpdate_Error(t *testing.T) {
+	db := dataprovider.NewSqlite()
+	repo := NewPastelRepository(db)
+	pastel := test.BuildPastelDomainWithIgredients("Pantaneiro", []string{"Carne"})
+
+	pastel.Name = "Pantaneiro Update"
+	pastel.Price = float32(12.50)
+	pastel.Ingredients[0].Name = "Carne Update"
+	pastel.Ingredients[0].Desc = "Update"
+
+	err := repo.Update(pastel)
+	assert.NotNil(t, err)
+
+	assert.EqualValues(t, "registro não encontrado", err.Error())
+}
