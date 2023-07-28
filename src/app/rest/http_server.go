@@ -23,12 +23,16 @@ func InitRoutes(repository dataprovider.IPastelRepository) *chi.Mux {
 	updateController := entrypoint.NewUpdatePastelController(
 		usecase.NewUpdatePastelUseCase(repository),
 	)
+	deleteController := entrypoint.NewDeletePastelController(
+		usecase.IDeletePastelUseCase(repository),
+	)
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Logger)
 	r.Route(utils.BaseUri, func(r chi.Router) {
 		r.Post("/", createController.Create)
 		r.Get("/{id}", findController.FindById)
 		r.Put("/{id}", updateController.Update)
+		r.Delete("/{id}", deleteController.DeleteById)
 	})
 	return r
 }

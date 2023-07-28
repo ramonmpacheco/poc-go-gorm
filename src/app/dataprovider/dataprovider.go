@@ -7,12 +7,14 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type IDatabase interface {
 	Create(value interface{}) *gorm.DB
 	Model(value interface{}) *gorm.DB
 	UpdateWithAssociations(value interface{}) *gorm.DB
+	Delete(value interface{}, args ...interface{}) *gorm.DB
 }
 
 type Database struct {
@@ -33,6 +35,10 @@ func (dbi *Database) UpdateWithAssociations(value interface{}) *gorm.DB {
 
 func getFullSaveAssociations() *gorm.Session {
 	return &gorm.Session{FullSaveAssociations: true}
+}
+
+func (dbi *Database) Delete(value interface{}, args ...interface{}) *gorm.DB {
+	return dbi.DB.Select(clause.Associations).Delete(value)
 }
 
 func NewPostgres() *Database {

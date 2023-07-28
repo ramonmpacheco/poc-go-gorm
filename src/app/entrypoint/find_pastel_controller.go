@@ -25,7 +25,7 @@ func (fpuc *findPastelController) FindById(w http.ResponseWriter, r *http.Reques
 	pastel, err := fpuc.UseCase.FindById(id)
 	if err != nil {
 		render.Status(r, model.GetStatusFrom(err))
-		render.JSON(w, r, model.NewCreateResponse(false, err.Error()))
+		render.JSON(w, r, model.NewErrorResponse(err.Error(), nil))
 		return
 	}
 	render.Status(r, http.StatusOK)

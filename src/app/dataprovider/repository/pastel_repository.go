@@ -52,3 +52,15 @@ func (pr *pastelRepository) Update(pastel model.Pastel) error {
 	}
 	return nil
 }
+
+func (pr *pastelRepository) DeleteById(id string) error {
+	result := pr.Db.Delete(&entity.Pastel{ID: id})
+	if result.Error != nil {
+		return dataerrors.GetProperError(result.Error)
+	} else if result.RowsAffected == 0 {
+		return dataerrors.GetProperError(
+			dataerrors.NewCustomErr(dataerrors.ErrNotFound.Error()),
+		)
+	}
+	return nil
+}

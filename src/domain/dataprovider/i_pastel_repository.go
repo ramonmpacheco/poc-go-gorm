@@ -6,4 +6,5 @@ type IPastelRepository interface {
 	Create(pastel model.Pastel) error
 	FindById(id string) (*model.Pastel, error)
 	Update(pastel model.Pastel) error
+	DeleteById(id string) error
 }

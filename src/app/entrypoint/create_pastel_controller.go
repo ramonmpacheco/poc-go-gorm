@@ -41,7 +41,7 @@ func (cpc *createPastelController) Create(w http.ResponseWriter, r *http.Request
 	id, err := cpc.UseCase.Create(converter.ToPastelDomainFromCreate(request))
 	if err != nil {
 		render.Status(r, http.StatusInternalServerError)
-		render.JSON(w, r, model.NewCreateResponse(false, err.Error()))
+		render.JSON(w, r, model.NewErrorResponse(err.Error(), nil))
 		return
 	}
 	render.Status(r, http.StatusCreated)

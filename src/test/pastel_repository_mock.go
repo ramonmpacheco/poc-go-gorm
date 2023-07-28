@@ -26,3 +26,8 @@ func (prm *PastelRepositoryMock) Update(pastel model.Pastel) error {
 	args := prm.Called(pastel)
 	return args.Error(0)
 }
+
+func (prm *PastelRepositoryMock) DeleteById(id string) error {
+	args := prm.Called(id)
+	return args.Error(0)
+}
