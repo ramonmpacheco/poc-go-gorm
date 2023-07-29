@@ -1,15 +1,39 @@
+@id = ""
 
-POST http://localhost:3000/pastel
+###
+
+POST http://localhost:3000/pasteis
 
 {
     "name": "Boi ralado",
     "price": 9.50,
     "ingredients":  [
         {
-            "name": "Queijo mussarela",
+            "name": "carne",
 	        "desc": "200 gramas"
         }
     ]
 }
 
 ###
+
+GET http://localhost:3000/pasteis/{{id}}
+
+###
+
+PUT http://localhost:3000/pasteis/{{id}}
+
+{
+    "name": "Boizão Ralado",
+    "price": 11.50,
+    "ingredients":  [
+        {
+            "name": "picanha",
+	        "desc": "200 gramas"
+        }
+    ]
+}
+
+###
+
+DELETE  http://localhost:3000/pasteis/{{id}}
