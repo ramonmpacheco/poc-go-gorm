@@ -1,19 +1,19 @@
 package repository
 
 import (
-	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider"
 	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/converter"
 	dataerrors "github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/data_errors"
 	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/entity"
+	gormedge "github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/gorm_internal/gorm_edge"
 	domaindataprovider "github.com/ramonmpacheco/poc-go-gorm/domain/dataprovider"
 	"github.com/ramonmpacheco/poc-go-gorm/domain/model"
 )
 
 type pastelRepository struct {
-	Db dataprovider.IDatabase
+	Db gormedge.IDatabase
 }
 
-func NewPastelRepository(db dataprovider.IDatabase) domaindataprovider.IPastelRepository {
+func NewPastelRepository(db gormedge.IDatabase) domaindataprovider.IPastelRepository {
 	return &pastelRepository{
 		Db: db,
 	}

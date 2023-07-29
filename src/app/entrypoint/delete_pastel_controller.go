@@ -27,6 +27,6 @@ func (fpuc *deletePastelController) DeleteById(w http.ResponseWriter, r *http.Re
 		render.JSON(w, r, model.NewErrorResponse(err.Error(), nil))
 		return
 	}
-	render.Status(r, http.StatusOK)
+	render.Status(r, http.StatusNoContent)
 	render.JSON(w, r, model.NewDeleteResponseSuccess(id))
 }

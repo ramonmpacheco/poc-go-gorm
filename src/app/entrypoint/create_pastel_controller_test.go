@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider"
+	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/gorm_internal/gorm_dataprovider"
 	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/repository"
 	"github.com/ramonmpacheco/poc-go-gorm/app/entrypoint/model"
 	"github.com/ramonmpacheco/poc-go-gorm/app/rest"
@@ -26,7 +26,7 @@ func TestCreate_success(t *testing.T) {
 	assert.Nil(t, err)
 	resp := httptest.NewRecorder()
 
-	rest.InitRoutes(repository.NewPastelRepository(dataprovider.NewSqlite())).
+	rest.InitRoutes(repository.NewPastelRepository(gormdataprovider.NewSqlite())).
 		ServeHTTP(resp, req)
 	assert.EqualValues(t, http.StatusCreated, resp.Code)
 
@@ -52,7 +52,7 @@ func TestCreate_validation_error(t *testing.T) {
 	assert.Nil(t, err)
 	resp := httptest.NewRecorder()
 
-	rest.InitRoutes(repository.NewPastelRepository(dataprovider.NewSqlite())).
+	rest.InitRoutes(repository.NewPastelRepository(gormdataprovider.NewSqlite())).
 		ServeHTTP(resp, req)
 	assert.EqualValues(t, http.StatusBadRequest, resp.Code)
 

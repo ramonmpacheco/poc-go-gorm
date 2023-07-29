@@ -12,12 +12,12 @@ type deletePastelUseCase struct {
 	Repository dataprovider.IPastelRepository
 }
 
-func NewDeletePastelUseCase(repository dataprovider.IPastelRepository) IFindPastelUseCase {
-	return &findPastelUseCase{
+func NewDeletePastelUseCase(repository dataprovider.IPastelRepository) IDeletePastelUseCase {
+	return &deletePastelUseCase{
 		Repository: repository,
 	}
 }
 
-func (cpuc *findPastelUseCase) DeleteById(id string) error {
+func (cpuc *deletePastelUseCase) DeleteById(id string) error {
 	return cpuc.Repository.DeleteById(id)
 }

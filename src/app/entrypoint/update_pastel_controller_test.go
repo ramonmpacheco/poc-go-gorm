@@ -3,21 +3,20 @@ package entrypoint_test
 import (
 	"bytes"
 	"encoding/json"
-	"net/http"
-	"net/http/httptest"
-	"testing"
-
-	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider"
+	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/gorm_internal/gorm_dataprovider"
 	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/repository"
 	"github.com/ramonmpacheco/poc-go-gorm/app/entrypoint/model"
 	"github.com/ramonmpacheco/poc-go-gorm/app/rest"
 	"github.com/ramonmpacheco/poc-go-gorm/test"
 	"github.com/ramonmpacheco/poc-go-gorm/utils"
 	"github.com/stretchr/testify/assert"
+	"net/http"
+	"net/http/httptest"
+	"testing"
 )
 
 func TestUpdate_Success(t *testing.T) {
-	db := dataprovider.NewSqlite()
+	db := gormdataprovider.NewSqlite()
 	repo := repository.NewPastelRepository(db)
 	pastel := test.BuildPastelDomainWithIgredients("Pantaneiro", []string{"Carne"})
 	err := repo.Create(pastel)
@@ -66,7 +65,7 @@ func TestUpdate_Not_Found(t *testing.T) {
 	assert.Nil(t, err)
 	resp := httptest.NewRecorder()
 
-	rest.InitRoutes(repository.NewPastelRepository(dataprovider.NewSqlite())).
+	rest.InitRoutes(repository.NewPastelRepository(gormdataprovider.NewSqlite())).
 		ServeHTTP(resp, req)
 	assert.EqualValues(t, http.StatusNotFound, resp.Code)
 
@@ -92,7 +91,7 @@ func TestUpdate_Validation_Error(t *testing.T) {
 	assert.Nil(t, err)
 	resp := httptest.NewRecorder()
 
-	rest.InitRoutes(repository.NewPastelRepository(dataprovider.NewSqlite())).
+	rest.InitRoutes(repository.NewPastelRepository(gormdataprovider.NewSqlite())).
 		ServeHTTP(resp, req)
 	assert.EqualValues(t, http.StatusBadRequest, resp.Code)
 

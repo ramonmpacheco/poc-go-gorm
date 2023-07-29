@@ -2,21 +2,20 @@ package entrypoint_test
 
 import (
 	"encoding/json"
-	"net/http"
-	"net/http/httptest"
-	"testing"
-
-	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider"
+	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/gorm_internal/gorm_dataprovider"
 	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/repository"
 	"github.com/ramonmpacheco/poc-go-gorm/app/entrypoint/model"
 	"github.com/ramonmpacheco/poc-go-gorm/app/rest"
 	"github.com/ramonmpacheco/poc-go-gorm/test"
 	"github.com/ramonmpacheco/poc-go-gorm/utils"
 	"github.com/stretchr/testify/assert"
+	"net/http"
+	"net/http/httptest"
+	"testing"
 )
 
 func TestFindById_Success(t *testing.T) {
-	db := dataprovider.NewSqlite()
+	db := gormdataprovider.NewSqlite()
 	repo := repository.NewPastelRepository(db)
 	pastelToSave := test.BuildPastelDomainWithIgredients("Pantaneiro", []string{"Carne"})
 	err := repo.Create(pastelToSave)
@@ -48,7 +47,7 @@ func TestFindById_Success(t *testing.T) {
 }
 
 func TestFindById_Notfound(t *testing.T) {
-	db := dataprovider.NewSqlite()
+	db := gormdataprovider.NewSqlite()
 	repo := repository.NewPastelRepository(db)
 
 	req, err := http.NewRequest("GET", utils.BaseUri+"/1234", nil)

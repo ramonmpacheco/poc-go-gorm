@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
-	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider"
 	dataerrors "github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/data_errors"
 	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/entity"
+	gormdataprovider "github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/gorm_internal/gorm_dataprovider"
 	domainerrors "github.com/ramonmpacheco/poc-go-gorm/domain/domain_errors"
 	"github.com/ramonmpacheco/poc-go-gorm/domain/model"
 	"github.com/ramonmpacheco/poc-go-gorm/test"
@@ -16,7 +16,7 @@ import (
 )
 
 func TestCreate_success(t *testing.T) {
-	db := dataprovider.NewSqlite()
+	db := gormdataprovider.NewSqlite()
 	repository := NewPastelRepository(db)
 	pastelToSave := test.BuildPastelDomainWithIgredients("Pantaneiro", []string{"Carne"})
 	err := repository.Create(pastelToSave)
@@ -37,7 +37,7 @@ func TestCreate_success(t *testing.T) {
 }
 
 func TestCreate_using_same_ingredient_twice(t *testing.T) {
-	db := dataprovider.NewSqlite()
+	db := gormdataprovider.NewSqlite()
 	repository := NewPastelRepository(db)
 
 	pastelToSave := test.BuildPastelDomainWithIgredients("Pantaneiro", []string{"Carne"})
@@ -68,7 +68,7 @@ func TestCreate_using_same_ingredient_twice(t *testing.T) {
 }
 
 func TestCreate_more_than_one_ingridient(t *testing.T) {
-	db := dataprovider.NewSqlite()
+	db := gormdataprovider.NewSqlite()
 	repository := NewPastelRepository(db)
 	pastelToSave := test.BuildPastelDomainWithIgredients("Boi Ralado", []string{"Carne", "Queijo", "Azeitona"})
 	repository.Create(pastelToSave)
@@ -126,7 +126,7 @@ func TestCreate_internal_error(t *testing.T) {
 }
 
 func TestFindById_Success(t *testing.T) {
-	db := dataprovider.NewSqlite()
+	db := gormdataprovider.NewSqlite()
 	repository := NewPastelRepository(db)
 	pastelToSave := test.BuildPastelDomainWithIgredients("Pantaneiro", []string{"Carne"})
 	err := repository.Create(pastelToSave)
@@ -145,7 +145,7 @@ func TestFindById_Success(t *testing.T) {
 }
 
 func TestFindById_Notfound(t *testing.T) {
-	db := dataprovider.NewSqlite()
+	db := gormdataprovider.NewSqlite()
 	repository := NewPastelRepository(db)
 
 	pastel, err := repository.FindById("1234")
@@ -156,7 +156,7 @@ func TestFindById_Notfound(t *testing.T) {
 }
 
 func TestUpdate_Success(t *testing.T) {
-	db := dataprovider.NewSqlite()
+	db := gormdataprovider.NewSqlite()
 	repo := NewPastelRepository(db)
 	pastel := test.BuildPastelDomainWithIgredients("Pantaneiro", []string{"Carne"})
 	err := repo.Create(pastel)
@@ -182,7 +182,7 @@ func TestUpdate_Success(t *testing.T) {
 }
 
 func TestUpdate_Error(t *testing.T) {
-	db := dataprovider.NewSqlite()
+	db := gormdataprovider.NewSqlite()
 	repo := NewPastelRepository(db)
 	pastel := test.BuildPastelDomainWithIgredients("Pantaneiro", []string{"Carne"})
 
@@ -194,5 +194,55 @@ func TestUpdate_Error(t *testing.T) {
 	err := repo.Update(pastel)
 	assert.NotNil(t, err)
 
+	assert.EqualValues(t, "registro não encontrado", err.Error())
+}
+
+func TestDeleteById_Success(t *testing.T) {
+	db := gormdataprovider.NewSqlite()
+	repo := NewPastelRepository(db)
+	pastel := test.BuildPastelDomainWithIgredients("Pantaneiro", []string{"Carne"})
+
+	err := repo.Create(pastel)
+	assert.Nil(t, err)
+
+	err = repo.DeleteById(pastel.ID)
+	assert.Nil(t, err)
+}
+
+func TestDeleteById_When_Two_And_Delete_One(t *testing.T) {
+	db := gormdataprovider.NewSqlite()
+	repo := NewPastelRepository(db)
+
+	pastel1 := test.BuildPastelDomainWithIgredients("Pantaneiro", []string{"Carne"})
+	err := repo.Create(pastel1)
+	assert.Nil(t, err)
+
+	pastel2 := test.BuildPastelDomainWithIgredients("Boi Ralado", []string{})
+	pastel2.Ingredients = pastel1.Ingredients
+	err = repo.Create(pastel2)
+	assert.Nil(t, err)
+
+	err = repo.DeleteById(pastel1.ID)
+	assert.Nil(t, err)
+
+	saved, err := repo.FindById(pastel2.ID)
+	assert.Nil(t, err)
+
+	assert.EqualValues(t, pastel2.Name, saved.Name)
+	assert.EqualValues(t, pastel2.Price, saved.Price)
+	assert.EqualValues(t, pastel2.Ingredients[0].Name, saved.Ingredients[0].Name)
+	assert.EqualValues(t, pastel2.Ingredients[0].Desc, saved.Ingredients[0].Desc)
+	assert.EqualValues(t, pastel2.Ingredients[0].Desc, saved.Ingredients[0].Desc)
+	assert.NotNil(t, saved.Ingredients[0].CreatedAt)
+	assert.NotNil(t, saved.Ingredients[0].UpdatedAt)
+}
+
+func TestDeleteById_Not_Found(t *testing.T) {
+	db := gormdataprovider.NewSqlite()
+	repo := NewPastelRepository(db)
+	pastel := test.BuildPastelDomainWithIgredients("Pantaneiro", []string{"Carne"})
+
+	err := repo.DeleteById(pastel.ID)
+	assert.NotNil(t, err)
 	assert.EqualValues(t, "registro não encontrado", err.Error())
 }

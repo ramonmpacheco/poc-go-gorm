@@ -1,11 +1,6 @@
-package dataprovider
+package gormedge
 
 import (
-	"fmt"
-
-	"github.com/ramonmpacheco/poc-go-gorm/app/dataprovider/entity"
-	"gorm.io/driver/postgres"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -39,28 +34,4 @@ func getFullSaveAssociations() *gorm.Session {
 
 func (dbi *Database) Delete(value interface{}, args ...interface{}) *gorm.DB {
 	return dbi.DB.Select(clause.Associations).Delete(value)
-}
-
-func NewPostgres() *Database {
-	fmt.Println("About to connect to database")
-	dsn := "host=poc-go-gorm-postgres user=postgres password=postgres dbname=poc_db port=5432 sslmode=disable"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect to database")
-	}
-	db.AutoMigrate(&entity.Pastel{}, &entity.Ingredient{})
-	return &Database{
-		DB: db,
-	}
-}
-
-func NewSqlite() *Database {
-	db, err := gorm.Open(sqlite.Open("file::memory:"), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect to database")
-	}
-	db.AutoMigrate(&entity.Pastel{}, &entity.Ingredient{})
-	return &Database{
-		DB: db,
-	}
 }
