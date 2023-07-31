@@ -33,5 +33,6 @@ func getCreateResponseLinks(id, selfHref string) []link {
 	links := make([]link, 0)
 	links = append(links, link{Rel: "ingredients", Href: fmt.Sprintf("%s/%s", selfHref, id), Type: "GET"})
 	links = append(links, link{Rel: "ingredients", Href: fmt.Sprintf("%s/%s", selfHref, id), Type: "DELETE"})
+	links = append(links, link{Rel: "ingredients", Href: fmt.Sprintf("%s/%s", selfHref, id), Type: "PUT"})
 	return links
 }
